@@ -1,34 +1,36 @@
-<<<<<<< HEAD
-# aws-eks-nextjs-app-ecr
-=======
-# nextjs-single-page-template
+### Deploy Nextjs application in AWS EKS cluster using Github actions
 
-## Getting Started
+Github repository: https://github.com/lukaevet/aws-eks-nextjs-app-actions
+Create ECR repository in AWS called  nextjs-application
 
-First, run the development server:
+#### Creating AWS EKS cluster using eksctl cli
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+Ref: https://towardsdatascience.com/kubernetes-application-deployment-with-aws-eks-and-ecr-4600e11b2d3c
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Upload CloudFormation stack to AWS with pre-existing stack `aws-eks-private-vpc-subnet.yaml` file with cluster name for example: `EKS-Demo-Cluster`
+ Edit `cluster.yaml` file and add newly created vpc and subnet id's of private and public AZ's.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Upload cluster to our AWS account 
+``eksctl create cluster -f cluster.yaml``
 
-## Learn More
+Update kube config file with: 
+`aws eks --region eu-central-1 update-kubeconfig --name EKS-Demo-Cluster`
 
-To learn more about Next.js, take a look at the following resources:
+Apply service manifest to out node:
+`kubectl apply -f service1.yaml`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To get external IP for our node
+`kubectl get nodes -o wide`
+and that will show our 2 public workers with public IP addresses and 1 private 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Finally we have to add inbound rule to our security group to allow listening on port 31479 port; port we have specified in our service manifest file. And that is also external port that that connection to the internet.
+To do that go to:
+Security groups and search for public SG for our cluster - `eksctl-EKS-Demo-Cluster-nodegroup-EKS-public-workers`
+Add inbound rule for port 3179 to everyone in IPv4.
 
-## Deploy on Vercel
+Next add everything and push it to our Github repository. 
+ Add secrets in your Github: Settings/Actions/secrets for AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ACCOUNT_ID
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Every time someone pushes code to your repository Github actions will be triggered and it will login to your AWS account and it will build, push and deploy nextjs application to your ECR image.
+Application will be deployed to your cluster we have created and it will apply deployment file in our root repository called deployment1.yaml that creates 2 replicas, opening port 3000 and has our new ECR image with tag latest.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
->>>>>>> 46f9d17 (aws eks cluster application v0)
