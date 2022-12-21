@@ -16,7 +16,7 @@ export default function About() {
         <div className={styles.content}>
           <Text tag="h2">Hello 👋</Text>
           <Text>
-            I'm Stu, a coffee lover ☕, 30-something-year-old
+            I'm Luka, a coffee lover ☕, 30-something-year-old
             <b>front-end developer</b> 💻 with a background in computer and
             electrical engineering. I am based out of sunny ☀️ Edinburgh,
             Scotland and currently doing freelance work and consulting for
