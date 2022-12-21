@@ -28,9 +28,10 @@ To do that go to:
 Security groups and search for public SG for our cluster - `eksctl-EKS-Demo-Cluster-nodegroup-EKS-public-workers`
 Add inbound rule for port 3179 to everyone in IPv4.
 
+### Github actions
 Next add everything and push it to our Github repository. 
  Add secrets in your Github: Settings/Actions/secrets for AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ACCOUNT_ID
 
+Github actions workflow ref: https://github.com/marketplace/actions/aws-ecr-eks
 Every time someone pushes code to your repository Github actions will be triggered and it will login to your AWS account and it will build, push and deploy nextjs application to your ECR image.
 Application will be deployed to your cluster we have created and it will apply deployment file in our root repository called deployment1.yaml that creates 2 replicas, opening port 3000 and has our new ECR image with tag latest.
-
