@@ -14,9 +14,9 @@ export default function About() {
           <ProfilePic />
         </div>
         <div className={styles.content}>
-          <Text tag="h2">Hello 👋</Text>
+          <Text tag="h2">Ola 👋</Text>
           <Text>
-            I'm Luka, a coffee lover ☕, 30-something-year-old
+            I'm Luka, a coffee lover ☕, 20-something-year-old
             <b>front-end developer</b> 💻 with a background in computer and
             electrical engineering. I am based out of sunny ☀️ Edinburgh,
             Scotland and currently doing freelance work and consulting for
