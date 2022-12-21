@@ -10,11 +10,11 @@ export default function Hero() {
     <Section id="hero" className={styles.hero}>
       <Container>
         <div className={styles.message}>
-          <h2>Stuart MacKenzie</h2>
+          <h2>Luka Evetovic</h2>
           <h3>
-            {"{"}Software Architect{"}"}
+            {"{"}DevOps{"}"}
           </h3>
-          <p>HTML • CSS • JavaScript • React • Gatsby</p>
+          <p>AWS - EKS - ECR - Github actions</p>
           <div className={styles.buttons}>
             <Button href="#contact" className={styles.button}>
               Get In Touch

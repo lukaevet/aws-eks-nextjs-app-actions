@@ -10,9 +10,7 @@ export default function About() {
   return (
     <Section id="about" className={styles.about}>
       <Container className={styles.container}>
-        <div className={styles.pic}>
-          <ProfilePic />
-        </div>
+        
         <div className={styles.content}>
           <Text tag="h2">Ola 👋</Text>
           <Text>
