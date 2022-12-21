@@ -1,3 +1,7 @@
+## NextJs application is forked
+Forked js application form: https://github.com/stuartmackenzie/nextjs-single-page-template
+
+
 ### Deploy Nextjs application in AWS EKS cluster using Github actions
 
 Github repository: https://github.com/lukaevet/aws-eks-nextjs-app-actions
@@ -34,4 +38,5 @@ Next add everything and push it to our Github repository.
 
 Github actions workflow ref: https://github.com/marketplace/actions/aws-ecr-eks
 Every time someone pushes code to your repository Github actions will be triggered and it will login to your AWS account and it will build, push and deploy nextjs application to your ECR image.
-Application will be deployed to your cluster we have created and it will apply deployment file in our root repository called deployment1.yaml that creates 2 replicas, opening port 3000 and has our new ECR image with tag latest.
+Application will be deployed to your cluster we have created and it will apply deployment file in our root repository called deployment1.yaml that creates 2 replicas and has our new ECR image with tag latest.
+Access our application with IP address from `kubectl get nodes -o wide`. In browser http://external_IP:31479
