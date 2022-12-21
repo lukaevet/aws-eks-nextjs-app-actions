@@ -1,37 +1,20 @@
+name: Build and Deploy to Docker Image
 on: push
-name: deploy
 jobs:
-  deploy:
-    name: deploy to cluster
+  little-ci-and-little-cd:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-central-1
-    
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-
-    - name: Deploy to cluster
-      uses: kodermax/kubectl-aws-eks@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: nextjs-application
-        IMAGE_TAG: ${{ github.sha }}
-      with:
-        args: set image $ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        
-    - name: verify deployment
-      uses: kodermax/kubectl-aws-eks@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      with:
-        args: rollout status nextjs-application
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Push image and deploy
+        uses: observian/littleci-littlecd-eks@master
+        with:
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          repo: nextjs-application
+          region: eu-central-1
+          tags: 0.1.1.${{ github.run_number }},${{ github.sha }}
+          eks_cluster_name: EKS-Demo-Cluster
+          k8s_manifest: deployment1.yaml
+          k8s_image_tag: 0.1.1.${{ github.run_number }}
