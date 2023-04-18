@@ -7,7 +7,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Tag data dynamically
-        run:  echo "TAG=$(date +'%Y-%m-%dT%H:%M:%S')" >> ${{ secrets.ECR_TAG_DATE }}  
+        run:  echo "TAG=$(date +'%Y-%m-%dT%H:%M:%S')" >> ${{ secrets.ECR_TAG_DATE }} echo $TAG
       - name: Push image and deploy
         uses: observian/littleci-littlecd-eks@master
         with:
@@ -16,7 +16,7 @@ jobs:
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           repo: nextjs-application
           region: eu-central-1
-          tags: $TAG
+          tags: ${{ secrets.ECR_TAG_DATE }}  
           eks_cluster_name: EKS-Demo-Cluster
           k8s_manifest: deployment1.yaml
-          k8s_image_tag: $TAG
+          k8s_image_tag: ${{ secrets.ECR_TAG_DATE }}  
