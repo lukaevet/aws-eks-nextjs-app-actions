@@ -6,8 +6,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set current date as env variable
-        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> ${{ vars.TAG_DATE }}
+      - name: "Set current date as env variable"
+        run: |
+          echo "builddate=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+        id: version
       - name: Push image and deploy
         uses: observian/littleci-littlecd-eks@master
         with:
@@ -16,7 +18,7 @@ jobs:
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           repo: nextjs-application
           region: eu-central-1
-          tags: ${{ vars.TAG_DATE }}
+          tags: ${{ steps.version.outputs.builddate }}
           eks_cluster_name: EKS-Demo-Cluster
           k8s_manifest: deployment1.yaml
-          k8s_image_tag: ${{ vars.TAG_DATE }}
+          k8s_image_tag: ${{ steps.version.outputs.builddate }}
