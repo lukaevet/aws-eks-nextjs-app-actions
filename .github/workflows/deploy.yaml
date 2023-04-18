@@ -1,7 +1,5 @@
 name: Build and Deploy to Docker Image
 on: push
-env:
-    ENV_VARIABLE: date +'%Y-%m-%dT%H:%M:%S'
 jobs:
   kubernetes-cluster:
     runs-on: ubuntu-latest
@@ -9,7 +7,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: check tag
-        run: echo "$ENV_VARIABLE"
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Push image and deploy
         uses: observian/littleci-littlecd-eks@master
         with:
@@ -18,7 +16,7 @@ jobs:
           account_id: ${{ secrets.AWS_ACCOUNT_ID }}
           repo: nextjs-application
           region: eu-central-1
-          tags: $ENV_VARIABLE
+          tags: ${{ steps.date.outputs.date }}
           eks_cluster_name: EKS-Demo-Cluster
           k8s_manifest: deployment1.yaml
-          k8s_image_tag: $ENV_VARIABLE
+          k8s_image_tag: ${{ steps.date.outputs.date }}
