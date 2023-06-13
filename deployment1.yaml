@@ -18,6 +18,6 @@ spec:
           - --cluster-name=EKS-Demo-Cluster
           - --ingress-class=alb
           name: back-end
-          image: 614007627891.dkr.ecr.eu-central-1.amazonaws.com/nextjs-application:latest
+          image: 614007627891.dkr.ecr.eu-central-1.amazonaws.com/nextjs-application:2023-06-13-T-12-51
           ports:
             - containerPort: 3000
