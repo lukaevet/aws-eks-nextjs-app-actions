@@ -1,6 +1,8 @@
-## NextJs application is forked
-Forked js application form: https://github.com/stuartmackenzie/nextjs-single-page-template
+## Project description
+This project is launched on AWS service called EKS. Infrastructure as Code is written in Cloudformation yaml file. EKS cluster is then deployed and then service and deployment file. Service uses LoadBalance to scale bewtween instances. Everytime someone pushes code to Github, action is triggered and new image is built and deployed to ECR and pod in EKS is being updated to use newer version of code.
 
+### NextJs application is forked
+Forked js application form: https://github.com/stuartmackenzie/nextjs-single-page-template
 
 ### Deploy Nextjs application in AWS EKS cluster using Github actions
 
@@ -40,3 +42,4 @@ Github actions workflow ref: https://github.com/marketplace/actions/aws-ecr-eks
 Every time someone pushes code to your repository Github actions will be triggered and it will login to your AWS account and it will build, push and deploy nextjs application to your ECR image.
 Application will be deployed to your cluster we have created and it will apply deployment file in our root repository called deployment1.yaml that creates 2 replicas and has our new ECR image with tag latest.
 Access our application with IP address from `kubectl get nodes -o wide`. In browser http://external_IP:31479
+To use one DNS url for every instance we have already setup Classic LoadBalancer and it will scale between these two public instances EKS is managing.
