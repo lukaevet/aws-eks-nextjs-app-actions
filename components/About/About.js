@@ -12,7 +12,7 @@ export default function About() {
       <Container className={styles.container}>
         
         <div className={styles.content}>
-          <Text tag="h2">Helloo 👋</Text>
+          <Text tag="h2">Hey! 👋</Text>
           <Text>
             I'm Luka, a tea lover ☕, 20-something-year-old
             <b>DevOps Engineer</b> 💻 
