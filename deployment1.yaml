@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: back-end
-          image: 614007627891.dkr.ecr.eu-central-1.amazonaws.com/nextjs-application:latest
           imagePullPolicy: Always
+          image: 614007627891.dkr.ecr.eu-central-1.amazonaws.com/nextjs-application:latest
           ports:
             - containerPort: 3000
