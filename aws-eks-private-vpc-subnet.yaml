@@ -62,15 +62,25 @@ Resources:
       InternetGatewayId: !Ref InternetGateway
       VpcId: !Ref VPC
 
-  PublicRouteTable:
+  PublicRouteTable01:
     Type: AWS::EC2::RouteTable
     Properties:
       VpcId: !Ref VPC
       Tags:
       - Key: Name
-        Value: Public Subnets
+        Value: Public Subnet AZ1
       - Key: Network
-        Value: Public
+        Value: Public01
+
+  PublicRouteTable02:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+      - Key: Name
+        Value: Public Subnet AZ2
+      - Key: Network
+        Value: Public02
 
   PrivateRouteTable01:
     Type: AWS::EC2::RouteTable
@@ -92,11 +102,19 @@ Resources:
       - Key: Network
         Value: Private02
 
-  PublicRoute:
+  PublicRoute01:
     DependsOn: VPCGatewayAttachment
     Type: AWS::EC2::Route
     Properties:
-      RouteTableId: !Ref PublicRouteTable
+      RouteTableId: !Ref PublicRouteTable01
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicRoute02:
+    DependsOn: VPCGatewayAttachment
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable02
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
 
@@ -113,12 +131,12 @@ Resources:
   PrivateRoute02:
     DependsOn:
     - VPCGatewayAttachment
-    - NatGateway02
+    - NatGateway01
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref PrivateRouteTable02
       DestinationCidrBlock: 0.0.0.0/0
-      NatGatewayId: !Ref NatGateway02
+      NatGatewayId: !Ref NatGateway01
 
   NatGateway01:
     DependsOn:
@@ -133,27 +151,7 @@ Resources:
       - Key: Name
         Value: !Sub '${AWS::StackName}-NatGatewayAZ1'
 
-  NatGateway02:
-    DependsOn:
-    - NatGatewayEIP2
-    - PublicSubnet02
-    - VPCGatewayAttachment
-    Type: AWS::EC2::NatGateway
-    Properties:
-      AllocationId: !GetAtt 'NatGatewayEIP2.AllocationId'
-      SubnetId: !Ref PublicSubnet02
-      Tags:
-      - Key: Name
-        Value: !Sub '${AWS::StackName}-NatGatewayAZ2'
-
   NatGatewayEIP1:
-    DependsOn:
-    - VPCGatewayAttachment
-    Type: 'AWS::EC2::EIP'
-    Properties:
-      Domain: vpc
-
-  NatGatewayEIP2:
     DependsOn:
     - VPCGatewayAttachment
     Type: 'AWS::EC2::EIP'
@@ -246,13 +244,13 @@ Resources:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref PublicSubnet01
-      RouteTableId: !Ref PublicRouteTable
+      RouteTableId: !Ref PublicRouteTable01
 
   PublicSubnet02RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       SubnetId: !Ref PublicSubnet02
-      RouteTableId: !Ref PublicRouteTable
+      RouteTableId: !Ref PublicRouteTable02
 
   PrivateSubnet01RouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
@@ -271,6 +269,46 @@ Resources:
     Properties:
       GroupDescription: Cluster communication with worker nodes
       VpcId: !Ref VPC
+
+  PublicSubnet01SSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: PublicSubnet01
+      Type: String
+      Value: !Ref PublicSubnet01
+      Description: ID of Public Subnet 01
+
+  PublicSubnet02SSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: PublicSubnet02
+      Type: String
+      Value: !Ref PublicSubnet02
+      Description: ID of Public Subnet 02
+
+  PrivateSubnet01SSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: PrivateSubnet01
+      Type: String
+      Value: !Ref PrivateSubnet01
+      Description: ID of Private Subnet 01
+
+  PrivateSubnet02SSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: PrivateSubnet02
+      Type: String
+      Value: !Ref PrivateSubnet02
+      Description: ID of Private Subnet 02
+
+  VPCSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: VPCSSM
+      Type: String
+      Value: !Ref VPC
+      Description: ID of VPC
 
 Outputs:
 
